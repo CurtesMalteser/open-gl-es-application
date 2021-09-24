@@ -3,6 +3,7 @@ package com.curtesmalteser.opengles.glview
 import android.opengl.GLES20
 import android.opengl.GLSurfaceView
 import android.opengl.Matrix
+import com.curtesmalteser.opengles.glview.shape.Square
 import com.curtesmalteser.opengles.glview.shape.Triangle
 import javax.microedition.khronos.egl.EGLConfig
 import javax.microedition.khronos.opengles.GL10
@@ -13,6 +14,7 @@ import javax.microedition.khronos.opengles.GL10
 class MyGLRenderer : GLSurfaceView.Renderer {
 
     private lateinit var mTriangle: Triangle
+    private lateinit var mSquare: Square
 
     // vPMatrix is an abbreviation for "Model View Projection Matrix"
     private val vPMatrix = FloatArray(16)
@@ -38,6 +40,7 @@ class MyGLRenderer : GLSurfaceView.Renderer {
 
         // initialize a triangle
         mTriangle = Triangle(loadShader)
+        mSquare = Square(loadShader)
     }
 
     override fun onDrawFrame(unused: GL10) {
@@ -50,7 +53,8 @@ class MyGLRenderer : GLSurfaceView.Renderer {
         // Calculate the projection and view transformation
         Matrix.multiplyMM(vPMatrix, 0, projectionMatrix, 0, viewMatrix, 0)
 
-        mTriangle.draw(vPMatrix)
+        //mTriangle.draw(vPMatrix)
+        mSquare.draw(vPMatrix)
     }
 
     override fun onSurfaceChanged(unused: GL10, width: Int, height: Int) {
