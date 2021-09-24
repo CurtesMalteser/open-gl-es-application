@@ -68,26 +68,25 @@ class Triangle(shader: (type: Int, shaderCode: String) -> Int) {
                 vertexStride,
                 vertexBuffer
             )
-
-            // get handle to fragment shader's vColor member
-            mColorHandle = GLES20.glGetUniformLocation(mProgram, "vColor").also { colorHandle ->
-
-                // Set color for drawing the triangle
-                GLES20.glUniform4fv(colorHandle, 1, color, 0)
-            }
-
-            // get handle to shape's transformation matrix
-            vPMatrixHandle = GLES20.glGetUniformLocation(mProgram, "uMVPMatrix")
-
-            // Pass the projection and view transformation to the shader
-            GLES20.glUniformMatrix4fv(vPMatrixHandle, 1, false, mvpMatrix, 0)
-
-            // Draw the triangle
-            GLES20.glDrawArrays(GLES20.GL_TRIANGLES, 0, vertexCount)
-
-            // Disable vertex array
-            GLES20.glDisableVertexAttribArray(positionHandle)
         }
+
+        // get handle to fragment shader's vColor member
+        mColorHandle = GLES20.glGetUniformLocation(mProgram, "vColor").also { colorHandle ->
+            // Set color for drawing the triangle
+            GLES20.glUniform4fv(colorHandle, 1, color, 0)
+        }
+
+        // get handle to shape's transformation matrix
+        vPMatrixHandle = GLES20.glGetUniformLocation(mProgram, "uMVPMatrix").also {
+            // Pass the projection and view transformation to the shader
+            GLES20.glUniformMatrix4fv(it, 1, false, mvpMatrix, 0)
+        }
+
+        // Draw the triangle
+        GLES20.glDrawArrays(GLES20.GL_TRIANGLES, 0, vertexCount)
+
+        // Disable vertex array
+        GLES20.glDisableVertexAttribArray(positionHandle)
     }
 
     init {
