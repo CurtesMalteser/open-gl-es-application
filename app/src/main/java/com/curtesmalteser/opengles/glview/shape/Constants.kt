@@ -15,11 +15,11 @@ const val vertexShaderCode = "uniform mat4 uMVPMatrix;" +
         // Note that the uMVPMatrix factor *must be first* in order
         // for the matrix multiplication product to be correct.
         "gl_Position = uMVPMatrix * vPosition;" +
-        //"gl_PointSize = 40.0;" + // to increase points size
+        // "gl_PointSize = 40.0;" + // to increase points size
         "}"
 
 const val fragmentShaderCode = "precision mediump float;" +
         "uniform vec4 vColor;" +
         "void main() {" +
-        "  gl_FragColor = vColor;" +
+        "gl_FragColor = vColor;" +
         "}"

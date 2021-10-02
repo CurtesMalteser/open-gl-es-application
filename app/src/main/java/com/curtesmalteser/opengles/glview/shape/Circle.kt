@@ -1,7 +1,6 @@
 package com.curtesmalteser.opengles.glview.shape
 
 import android.opengl.GLES20
-import android.util.Log
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
 import java.nio.FloatBuffer
@@ -18,38 +17,35 @@ class Circle(shader: (type: Int, shaderCode: String) -> Int) {
     private var mProgram: Int
 
     // number of coordinates per vertex in this array
-    private var triangleCoords = floatArrayOf(     // in counterclockwise order:
-        0.0f, 0.622008459f, 0.0f,      // top
-        -0.5f, -0.311004243f, 0.0f,    // bottom left
-        0.5f, -0.311004243f, 0.0f      // bottom right
-    )
+    private val triangleVertex get() = produceVertices()
 
     private var positionHandle: Int = 0
     private var mColorHandle: Int = 0
 
-    private val vertexCount: Int = triangleCoords.size / COORDS_PER_VERTEX
+    private val vertexCount: Int get() = triangleVertex.size / COORDS_PER_VERTEX
     private val vertexStride: Int = COORDS_PER_VERTEX * 4 // 4 bytes per vertex
 
     // Use to access and set the view transformation
     private var vPMatrixHandle: Int = 0
 
     // Set color with red, green, blue and alpha (opacity) values
-    val color = floatArrayOf(0.63671875f, 0.76953125f, 0.22265625f, 1.0f)
+    private val color = floatArrayOf(0.63671875f, 0.76953125f, 0.22265625f, 1.0f)
 
-    private var vertexBuffer: FloatBuffer =
+    private val vertexBuffer: FloatBuffer by lazy {
         // (number of coordinate values * 4 bytes per float)
-        ByteBuffer.allocateDirect(triangleCoords.size * 4).run {
+        ByteBuffer.allocateDirect(triangleVertex.size * 4).run {
             // use the device hardware's native byte order
             order(ByteOrder.nativeOrder())
 
             // create a floating point buffer from the ByteBuffer
             asFloatBuffer().apply {
                 // add the coordinates to the FloatBuffer
-                put(triangleCoords)
+                put(triangleVertex)
                 // set the buffer to read the first coordinate
                 position(0)
             }
         }
+    }
 
 
     fun draw(mvpMatrix: FloatArray) {
@@ -93,7 +89,7 @@ class Circle(shader: (type: Int, shaderCode: String) -> Int) {
         GLES20.glDisableVertexAttribArray(positionHandle)
     }
 
-    private val radius = 0.75f
+    private val radius = 0.5f
 
     private fun produceVertices(): FloatArray {
 
@@ -102,7 +98,7 @@ class Circle(shader: (type: Int, shaderCode: String) -> Int) {
 
         var lastIndex = 0
         return mutableListOf<Float>().apply {
-            for (i in 0..89) {
+            for (i in 0..90) {
                 val angle = i / 180f * PI
 
                 val x: Float = radius * cos(angle).toFloat()
@@ -119,12 +115,12 @@ class Circle(shader: (type: Int, shaderCode: String) -> Int) {
                 add(lastIndex++, -x); add(lastIndex++, y); add(lastIndex++, 1f)
 
                 // third quadrant
-                add(lastIndex++, -prevX); add(lastIndex++, -prevY); add(lastIndex++, 1f)
+                add(lastIndex++, -prevX); add(lastIndex++, prevY); add(lastIndex++, 1f)
                 add(lastIndex++, 0f); add(lastIndex++, 0f); add(lastIndex++, 1f)
                 add(lastIndex++, -x); add(lastIndex++, -y); add(lastIndex++, 1f)
 
                 // third quadrant
-                add(lastIndex++, prevX); add(lastIndex++, -prevY); add(lastIndex++, 1f)
+                add(lastIndex++, prevX); add(lastIndex++, prevY); add(lastIndex++, 1f)
                 add(lastIndex++, 0f); add(lastIndex++, 0f); add(lastIndex++, 1f)
                 add(lastIndex++, x); add(lastIndex++, -y); add(lastIndex++, 1f)
             }
@@ -148,10 +144,6 @@ class Circle(shader: (type: Int, shaderCode: String) -> Int) {
 
             // creates OpenGL ES program executables
             GLES20.glLinkProgram(it)
-        }
-
-        produceVertices().forEachIndexed { i, f ->
-            Log.d("TAGx", "i $i: $f")
         }
     }
 }
