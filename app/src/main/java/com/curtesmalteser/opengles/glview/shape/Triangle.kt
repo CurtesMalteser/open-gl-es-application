@@ -84,6 +84,7 @@ class Triangle(shader: (type: Int, shaderCode: String) -> Int) {
 
         // Draw the triangle
         GLES20.glDrawArrays(GLES20.GL_TRIANGLES, 0, vertexCount)
+        //GLES20.glDrawArrays(GLES20.GL_POINTS, 0, vertexCount) // draw points :)
 
         // Disable vertex array
         GLES20.glDisableVertexAttribArray(positionHandle)

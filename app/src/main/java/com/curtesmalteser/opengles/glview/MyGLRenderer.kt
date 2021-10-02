@@ -53,8 +53,8 @@ class MyGLRenderer : GLSurfaceView.Renderer {
         // Calculate the projection and view transformation
         Matrix.multiplyMM(vPMatrix, 0, projectionMatrix, 0, viewMatrix, 0)
 
-        mTriangle.draw(vPMatrix)
-        //mSquare.draw(vPMatrix)
+        //mTriangle.draw(vPMatrix)
+        mSquare.draw(vPMatrix)
     }
 
     override fun onSurfaceChanged(unused: GL10, width: Int, height: Int) {

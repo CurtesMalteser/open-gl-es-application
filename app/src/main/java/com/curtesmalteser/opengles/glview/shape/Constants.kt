@@ -14,7 +14,8 @@ const val vertexShaderCode = "uniform mat4 uMVPMatrix;" +
         // the matrix must be included as a modifier of gl_Position
         // Note that the uMVPMatrix factor *must be first* in order
         // for the matrix multiplication product to be correct.
-        "  gl_Position = uMVPMatrix * vPosition;" +
+        "gl_Position = uMVPMatrix * vPosition;" +
+        //"gl_PointSize = 40.0;" + // to increase points size
         "}"
 
 const val fragmentShaderCode = "precision mediump float;" +
